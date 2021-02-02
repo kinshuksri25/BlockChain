@@ -1,7 +1,6 @@
 const BlockChain = require("../blockChain.js");
 const Block = require("../block.js");
-const hexToBinary = require('hex-to-binary');
-const cryptoHash = require('../crypto-hash.js');
+const cryptoHash = require('../../util/crypto-hash.js');
 
 describe("BlockChain",()=>{
 

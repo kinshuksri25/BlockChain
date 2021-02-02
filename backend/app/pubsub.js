@@ -1,4 +1,3 @@
-const { time } = require("console");
 const redis = require("redis");
 
 const CHANNELS = {

@@ -2,12 +2,12 @@
   "name": "Crytocurrency-BlockChain",
   "version": "1.0.0",
   "description": "",
-  "main": "./backend/src/index.js",
+  "main": "./backend/index.js",
   "scripts": {
     "start": "node ./backend/src/index.js",
     "start-redis": "redis-server --daemonize yes",
-    "dev": "npm run start-redis && nodemon ./backend/src/index.js",
-    "dev-peer": "nodemon ./backend/src/index.js GENERATE_PEER_PORT",
+    "dev": "npm run start-redis && nodemon ./backend/index.js",
+    "dev-peer": "nodemon ./backend/index.js GENERATE_PEER_PORT",
     "test": "jest --watchAll"
   },
   "repository": {
