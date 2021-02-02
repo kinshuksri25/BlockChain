@@ -5,7 +5,9 @@
   "main": "./backend/src/index.js",
   "scripts": {
     "start": "node ./backend/src/index.js",
-    "dev": "nodemon ./backend/src/index.js",
+    "start-redis": "redis-server --daemonize yes",
+    "dev": "npm run start-redis && nodemon ./backend/src/index.js",
+    "dev-peer": "nodemon ./backend/src/index.js GENERATE_PEER_PORT",
     "test": "jest --watchAll"
   },
   "repository": {
@@ -23,9 +25,12 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "hex-to-binary": "^1.0.1",
-    "jest": "^26.6.3"
+    "jest": "^26.6.3",
+    "redis": "^3.0.2",
+    "request": "^2.88.2"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodeman": "^1.1.2",
     "nodemon": "^2.0.7"
   }
