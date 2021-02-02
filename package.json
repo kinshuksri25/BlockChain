@@ -1,0 +1,32 @@
+{
+  "name": "Crytocurrency-BlockChain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./backend/src/index.js",
+  "scripts": {
+    "start": "node ./backend/src/index.js",
+    "dev": "nodemon ./backend/src/index.js",
+    "test": "jest --watchAll"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kinshuksri25/BlockChain.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kinshuksri25/BlockChain/issues"
+  },
+  "homepage": "https://github.com/kinshuksri25/BlockChain#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "hex-to-binary": "^1.0.1",
+    "jest": "^26.6.3"
+  },
+  "devDependencies": {
+    "nodeman": "^1.1.2",
+    "nodemon": "^2.0.7"
+  }
+}
