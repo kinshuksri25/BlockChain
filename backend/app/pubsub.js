@@ -22,7 +22,9 @@ class PubSub{
     handleMessage(channel,message){
         const parsedMessage = JSON.parse(message);
         if(channel === CHANNELS.BLOCKCHAIN){
-            this.blockchain.replaceChain(parsedMessage);
+            this.blockchain.replaceChain(parsedMessage,true,()=>{
+                this.transactionPool.clearBlockChainTransaction({chain:parsedMessage});
+            });
         }
         if(channel === CHANNELS.TRANSACTION){
             this.transactionPool.setTransaction(parsedMessage);

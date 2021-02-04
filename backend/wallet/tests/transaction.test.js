@@ -1,6 +1,7 @@
 const { verifySignature } = require("../../util/elliptic.js");
 const Transaction = require("../transaction.js");
 const Wallet = require("../wallet.js");
+const {REWARD_INPUT,MINING_REWARD} = require("../../config.js");
 
 describe("Transaction",()=>{
     let transaction,senderWallet,recipent,amount;
@@ -139,6 +140,23 @@ describe("Transaction",()=>{
                     transaction.update({senderWallet,recipient:'foo',amount:999999})
                 }).toThrow("Amount exceeds balance");
             });
+        });
+    });
+
+    describe("rewardTransaction()",()=>{
+        let rewardTransaction,minerWallet;
+
+        beforeEach(()=>{
+            minerWallet = new Wallet();
+            rewardTransaction = Transaction.rewardTransaction({minerWallet});
+        });
+
+        it("create a transaction with the reward input",()=>{
+            expect(rewardTransaction.input).toEqual(REWARD_INPUT);
+        })
+
+        it("creates one transaction for the miner with the `MINIG_REWARD`",()=>{
+            expect(rewardTransaction.outputMap[minerWallet.publicKey]).toEqual(MINING_REWARD);
         });
     });
 });
