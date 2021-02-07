@@ -1,6 +1,7 @@
 const express = require("express");
 const request = require("request");
 const bodyParser = require("body-parser");
+const path = require("path");
 const BlockChain = require("./blockchain/blockChain.js");
 const PubSub = require('./app/pubsub.js');
 const { response } = require("express");
@@ -19,6 +20,7 @@ const transactionMiner = new TransactionMiner({blockchain,transactionPool,wallet
 let PEER_PORT;
 
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname,"../frontend/dist")));
 
 app.get('/api/blocks',(req,res)=>{
     res.json(blockchain.chain);
@@ -55,14 +57,18 @@ app.get('/api/transaction-pool-map',(req,res)=>{
     res.json(transactionPool.transactionMap);
 });
 
-app.get('api/mine-transaction',(req,res)=>{
+app.get('/api/mine-transactions',(req,res)=>{
     transactionMiner.mineTransaction();
     res.redirect('api/blocks');
 });
 
-app.get('api/wallet-info',(req,res)=>{
+app.get('/api/wallet-info',(req,res)=>{
     const address = wallet.publicKey;
     res.json({address,balance:Wallet.calculateBalance({chain:blockchain.chain,address})});
+});
+
+app.get("*",(req,res) =>{
+    res.sendFile(path.join(__dirname,'../frontend/dist/index.html'));
 });
 
 if(process.argv.slice(2)[0] === 'GENERATE_PEER_PORT'){
@@ -86,6 +92,43 @@ const syncWithRootState = () =>{
         }
     });
 }
+//Seeding Blockchain to enable frontend development
+const walletFoo = new Wallet();
+const walletBar = new Wallet();
+
+const generateWalletTransaction = ({wallet,recipient,amount}) => {
+    const transaction = wallet.createTransaction({recipient,amount,chain:blockchain.chain});
+    transactionPool.setTransaction(transaction);
+}
+
+const walletAction = () =>{
+    generateWalletTransaction({wallet,recipient : walletFoo.publicKey,amount:5});
+}
+
+const walletFooAction = () =>{
+    generateWalletTransaction({wallet:walletFoo,recipient : walletBar.publicKey,amount:10});
+}
+
+const walletBarAction = () =>{
+    generateWalletTransaction({wallet:walletBar,address : wallet.publicKey,amount:15});
+}
+
+for(let i=0;i<10;i++){
+    if(i%3 === 0){
+        walletAction();
+        walletFooAction();
+    }else if(i%3===1){
+        walletAction();
+        walletBarAction();
+    }else{
+        walletFooAction();
+        walletBarAction();
+    }
+
+    transactionMiner.mineTransaction();
+}
+
+//End
 
 const PORT = PEER_PORT || DEFAULT_PORT;
 
